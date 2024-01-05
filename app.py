@@ -4,12 +4,12 @@ from PIL import Image #Image Processing
 import numpy as np #Image Processing 
 
 #title
-st.title("Easy OCR - Extract Text from Images")
+st.title("Extract Text from Images")
 
 #subtitle
-st.markdown("## Optical Character Recognition - Using `easyocr`, `streamlit` -  hosted on 🤗 Spaces")
+st.markdown("## Optical Character Recognition - Using `streamlit` -  hosted on 🤗 Spaces")
 
-st.markdown("Link to the app - [image-to-text-app on 🤗 Spaces](https://huggingface.co/spaces/Amrrs/image-to-text-app)")
+st.markdown("Link to the app - [image-to-text-app on 🤗 Spaces](https://huggingface.co/spaces/arzy/image-to-text-app)")
 
 #image uploader
 image = st.file_uploader(label = "Upload your image here",type=['png','jpg','jpeg'])
@@ -27,7 +27,7 @@ if image is not None:
     input_image = Image.open(image) #read image
     st.image(input_image) #display image
 
-    with st.spinner("🤖 AI is at Work! "):
+    with st.spinner("💨 AI is at Work! "):
         
 
         result = reader.readtext(np.array(input_image))
@@ -44,4 +44,4 @@ if image is not None:
 else:
     st.write("Upload an Image")
 
-st.caption("Made with ❤️ by @1littlecoder. Credits to 🤗 Spaces for Hosting this ")
+st.caption("Made with ❤️ by arzy. Credits to 🤗 Spaces for Hosting this ")
