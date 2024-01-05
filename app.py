@@ -1,47 +1,38 @@
-import easyocr as ocr  #OCR
-import streamlit as st  #Web App
-from PIL import Image #Image Processing
-import numpy as np #Image Processing 
+import openai
+import streamlit as st
+from PIL import Image
+import numpy as np
 
-#title
-st.title("Extract Text from Images")
+# Set your OpenAI API key
+openai.api_key = "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"
 
-#subtitle
-st.markdown("## Optical Character Recognition - Using `streamlit` -  hosted on 🤗 Spaces")
+# Title and subtitle
+st.title("Generate Text from Images")
+st.markdown("## Generative Text - Using `streamlit` - hosted on 🤗 Spaces")
 
-st.markdown("Link to the app - [image-to-text-app on 🤗 Spaces](https://huggingface.co/spaces/arzy/image-to-text-app)")
-
-#image uploader
-image = st.file_uploader(label = "Upload your image here",type=['png','jpg','jpeg'])
-
-
-@st.cache
-def load_model(): 
-    reader = ocr.Reader(['en'],model_storage_directory='.')
-    return reader 
-
-reader = load_model() #load model
+# Image uploader
+image = st.file_uploader(label="Upload your image here", type=['png', 'jpg', 'jpeg'])
 
 if image is not None:
+    input_image = Image.open(image)
+    st.image(input_image)
 
-    input_image = Image.open(image) #read image
-    st.image(input_image) #display image
+    # OpenAI GPT-3.5 prompt generation
+    prompt = f"Generate a description for the image:\n{np.array(input_image)}"
 
     with st.spinner("💨 AI is at Work! "):
-        
+        result = openai.Completion.create(
+            engine="text-davinci-002",
+            prompt=prompt,
+            max_tokens=100
+        )
 
-        result = reader.readtext(np.array(input_image))
+        generated_text = result['choices'][0]['text']
 
-        result_text = [] #empty list for results
-
-
-        for text in result:
-            result_text.append(text[1])
-
-        st.write(result_text)
-    #st.success("Here you go!")
+        st.write(generated_text)
     st.balloons()
 else:
     st.write("Upload an Image")
 
-st.caption("Made with ❤️ by arzy. Credits to 🤗 Spaces for Hosting this ")
+st.caption("Made with ❤️ by arzy. Credits to 🤗 Spaces for Hosting this")
+
